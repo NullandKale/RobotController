@@ -24,7 +24,7 @@
                 </StackPanel>
                 <Button Grid.Row="1" Content="Connect" Click="Button_Click" Width="100"/>
             </Grid>
-            <Image Name="Frame" Width="320" Height="240" Source="black.png" />
+            <Image Name="Frame" Source="black.png" Stretch="Fill" KeyDown="OnKeyDownHandler" />
             <Label Content=""/>
         </StackPanel>
         

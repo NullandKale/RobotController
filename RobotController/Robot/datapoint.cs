@@ -78,6 +78,7 @@ namespace RobotController.Robot
                 bmp.SetPixel((i / 3) % 160, (i / 3) / 160, c);
             }
 
+            bmp.RotateFlip(RotateFlipType.RotateNoneFlipXY);
             return bmp;
         }
 

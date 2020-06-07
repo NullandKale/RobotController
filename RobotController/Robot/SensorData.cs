@@ -11,7 +11,7 @@ namespace RobotController.Robot
     {
         public string tag = "S";
         List<datapoint> memory;
-        datapoint mostRecent;
+        public datapoint mostRecent;
 
         MainWindow window;
 

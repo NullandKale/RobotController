@@ -115,37 +115,30 @@ namespace RobotController.netcode
                 }
 
 
-                string line = "";
+                string line = s.ReadLine();
 
-                try
+                if(line != null)
                 {
-                    line = s.ReadLine();
-                }
-                catch (Exception e)
-                {
-                    Trace.WriteLine("Socket Error, " + e.Message);
-                }
-
-                int index = line.IndexOf("\n");
-                if (index > 0)
-                {
-                    line = line.Substring(0, index);
-                }
-
-                if (line.Length > 0)
-                {
-                    if (line.Contains("|"))
+                    if (line.Length > 0)
                     {
-                        string[] split = line.Split("|");
-                        if (taggedReceivers.ContainsKey(split[0]))
+                        int index = line.IndexOf("\n");
+                        if (index > 0)
                         {
-                            taggedReceivers[split[0]].Invoke(split[1]);
+                            line = line.Substring(0, index);
                         }
-                    }
+                        if (line.Contains("|"))
+                        {
+                            string[] split = line.Split("|");
+                            if (taggedReceivers.ContainsKey(split[0]))
+                            {
+                                taggedReceivers[split[0]].Invoke(split[1]);
+                            }
+                        }
 
-                    for (int i = 0; i < receivers.Count; i++)
-                    {
-                        receivers[i].Invoke(line);
+                        for (int i = 0; i < receivers.Count; i++)
+                        {
+                            receivers[i].Invoke(line);
+                        }
                     }
                 }
 
