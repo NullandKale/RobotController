@@ -114,10 +114,18 @@ namespace RobotController.netcode
                     Thread.Sleep(1);
                 }
 
+                string line = null;
 
-                string line = s.ReadLine();
+                try
+                {
+                    line = s.ReadLine();
+                }
+                catch(Exception e)
+                {
+                    Trace.WriteLine("Network Error: " + e.ToString());
+                }
 
-                if(line != null)
+                if (line != null)
                 {
                     if (line.Length > 0)
                     {

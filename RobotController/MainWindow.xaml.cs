@@ -31,11 +31,11 @@ namespace RobotController
             InitializeComponent();
         }
 
+        int offset1 = 0;
+        int offset2 = 0;
+
         private void OnKeyDownHandler(object sender, KeyEventArgs e)
         {
-            int offset1 = 0;
-            int offset2 = 0;
-
             switch(e.Key)
             {
                 case Key.Up:
@@ -60,10 +60,10 @@ namespace RobotController
                     }
             }
 
-            if(offset1 != 0 || offset2 != 0)
+            if (sensorData != null)
             {
-                Trace.WriteLine("servo|" + (offset1 + sensorData.mostRecent.currentServo1) + "," + (offset2 + sensorData.mostRecent.currentServo2));
-                client.writeCache.Enqueue("servo|" + (offset1 + sensorData.mostRecent.currentServo1) + "," + (offset2 + sensorData.mostRecent.currentServo2));
+                Trace.WriteLine("servo|" + (offset1) + "," + (offset2));
+                client.writeCache.Enqueue("servo|" + (offset1) + "," + (offset2));
             }
         }
 
@@ -75,6 +75,8 @@ namespace RobotController
 
             sensorData = new SensorData(this);
             client.taggedReceivers.Add(sensorData.tag, sensorData.receive);
+
+            IP.IsEnabled = false;
             //client.receivers.Add((string s) =>
             //{
             //    if(s.Length > 10)

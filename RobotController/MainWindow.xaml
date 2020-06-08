@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RobotController"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" KeyDown="OnKeyDownHandler">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -24,7 +24,7 @@
                 </StackPanel>
                 <Button Grid.Row="1" Content="Connect" Click="Button_Click" Width="100"/>
             </Grid>
-            <Image Name="Frame" Source="black.png" Stretch="Fill" KeyDown="OnKeyDownHandler" />
+            <Image Name="Frame" Source="black.png" Stretch="Fill" />
             <Label Content=""/>
         </StackPanel>
         

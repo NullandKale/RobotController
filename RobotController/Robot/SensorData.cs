@@ -24,7 +24,6 @@ namespace RobotController.Robot
         public void receive(string message)
         {
             mostRecent = datapoint.Deserialize(Convert.FromBase64String(message.Trim('\n')), 0);
-            Trace.WriteLine(mostRecent.tick);
             memory.Add(mostRecent);
             updateDisplay();
         }
