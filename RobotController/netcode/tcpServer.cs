@@ -23,6 +23,7 @@ namespace RobotController.netcode
 
         public void start()
         {
+            listenThread.IsBackground = true;
             listenThread.Start();
         }
 

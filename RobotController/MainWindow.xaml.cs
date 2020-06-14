@@ -25,10 +25,15 @@ namespace RobotController
     {
         public tcpClient client;
         public SensorData sensorData;
-
+        public ControllerController controller;
+        public Hardware hardware;
         public MainWindow()
         {
             InitializeComponent();
+            controller = new ControllerController(this);
+            hardware = new Hardware(this);
+
+            controller.startThread();
         }
 
         int offset1 = 0;
@@ -62,8 +67,7 @@ namespace RobotController
 
             if (sensorData != null)
             {
-                Trace.WriteLine("servo|" + (offset1) + "," + (offset2));
-                client.writeCache.Enqueue("servo|" + (offset1) + "," + (offset2));
+                hardware.setServo(offset1, offset2);
             }
         }
 

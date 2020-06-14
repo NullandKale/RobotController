@@ -34,7 +34,9 @@ namespace RobotController.netcode
             writeThread = new Thread(writeThreadMain);
             readThread = new Thread(readThreadMain);
 
+            writeThread.IsBackground = true;
             writeThread.Start();
+            readThread.IsBackground = true;
             readThread.Start();
         }
 

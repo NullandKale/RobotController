@@ -52,7 +52,9 @@ namespace RobotController.netcode
             writeThread = new Thread(writeThreadMain);
             readThread = new Thread(readThreadMain);
 
+            writeThread.IsBackground = true;
             writeThread.Start();
+            readThread.IsBackground = true;
             readThread.Start();
         }
 
@@ -120,7 +122,7 @@ namespace RobotController.netcode
                 {
                     line = s.ReadLine();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Trace.WriteLine("Network Error: " + e.ToString());
                 }

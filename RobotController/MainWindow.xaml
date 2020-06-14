@@ -3,34 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RobotController"
+        xmlns:local="clr-namespace:RobotController" xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" KeyDown="OnKeyDownHandler">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0" VerticalAlignment="Center">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Label Content="IP:"/>
-                    <TextBox Name="IP" Width="300" Text="192.168.1.166"/>
-                </StackPanel>
-                <Button Grid.Row="1" Content="Connect" Click="Button_Click" Width="100"/>
-            </Grid>
-            <Image Name="Frame" Source="black.png" Stretch="Fill" />
-            <Label Content=""/>
-        </StackPanel>
-        
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label Content="IP:"/>
+                <TextBox Name="IP" Width="300" Text="192.168.1.166"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Connect" Click="Button_Click" Width="100"/>
+            </StackPanel>
+            <Image Grid.Row="2" Name="Frame" Source="black.png" Stretch="Uniform" />
+        </Grid>
+
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
@@ -46,26 +45,15 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="0" Grid.Row="0" Content="tick: " />
-            <Label Grid.Column="0" Grid.Row="1" Content="battery voltage: " />
-            <Label Grid.Column="0" Grid.Row="2" Content="range: " />
-            <Label Grid.Column="0" Grid.Row="3" Content="x y z: " />
-            <Label Grid.Column="0" Grid.Row="4" Content="kx ky kz: " />
-            <Label Grid.Column="0" Grid.Row="5" Content="ax ay az: " />
-            <Label Grid.Column="0" Grid.Row="6" Content="gx gy gz: " />
-            <Label Grid.Column="0" Grid.Row="7" Content="motors: " />
-            <Label Grid.Column="0" Grid.Row="8" Content="servos: " />
-
-            <Label Grid.Column="1" Grid.Row="0" Name="tick"/>
-            <Label Grid.Column="1" Grid.Row="1" Name="battery"/>
-            <Label Grid.Column="1" Grid.Row="2" Name="range"/>
-            <Label Grid.Column="1" Grid.Row="3" Name="angles"/>
-            <Label Grid.Column="1" Grid.Row="4" Name="kangles"/>
-            <Label Grid.Column="1" Grid.Row="5" Name="accel"/>
-            <Label Grid.Column="1" Grid.Row="6" Name="gyro"/>
-            <Label Grid.Column="1" Grid.Row="7" Name="motors"/>
-            <Label Grid.Column="1" Grid.Row="8" Name="servos"/>
-
+            <Label Grid.Column="0" Grid.Row="0" Name="tick"/>
+            <Label Grid.Column="0" Grid.Row="1" Name="battery"/>
+            <Label Grid.Column="0" Grid.Row="2" Name="range"/>
+            <Label Grid.Column="0" Grid.Row="3" Name="angles"/>
+            <Label Grid.Column="0" Grid.Row="4" Name="kangles"/>
+            <Label Grid.Column="0" Grid.Row="5" Name="accel"/>
+            <Label Grid.Column="0" Grid.Row="6" Name="gyro"/>
+            <Label Grid.Column="0" Grid.Row="7" Name="motors"/>
+            <Label Grid.Column="0" Grid.Row="8" Name="servos"/>
         </Grid>
     </Grid>
 </Window>
