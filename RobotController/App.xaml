@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:RobotController"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="Main.xaml" />
     </Application.Resources>
 </Application>
