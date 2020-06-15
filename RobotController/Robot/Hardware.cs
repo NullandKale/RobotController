@@ -17,7 +17,28 @@ namespace RobotController.Robot
         {
             if (window.client != null && window.sensorData != null)
             {
-                window.client.writeCache.Enqueue("motor|" + (r) + "," + (l));
+                if(r == l)
+                {
+                    if (r == 255)
+                    {
+                        r = 255;
+                        l = 235;
+                    }
+                    else if(r == -255)
+                    {
+                        r = -255;
+                        l = -255;
+                    }
+                }
+
+                if(window.sensorData.mostRecent.range == 0 || window.sensorData.mostRecent.range > 30 || (l < 0 && r < 0))
+                {
+                    window.client.writeCache.Enqueue("motor|" + (r) + "," + (l));
+                }
+                else
+                {
+                    window.client.writeCache.Enqueue("motor|0,0");
+                }
             }
         }
 

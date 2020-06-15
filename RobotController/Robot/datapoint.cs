@@ -26,7 +26,7 @@ namespace RobotController.Robot
         public float gX;
         public float gY;
         public float gZ;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5000)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 57600)]
         public byte[] imageData;
         public int currentMotorL;
         public int currentMotorR;
@@ -68,7 +68,7 @@ namespace RobotController.Robot
             return ms.ToArray();
         }
 
-        public static Bitmap BitmapFromData(byte[] data)
+        public static Bitmap BitmapFromJPEGData(byte[] data)
         {
             Bitmap bmp = new Bitmap(160, 120);
 
@@ -78,6 +78,20 @@ namespace RobotController.Robot
                 //bmp.RotateFlip(RotateFlipType.RotateNoneFlipXY);
             }
 
+            return bmp;
+        }
+
+        public static Bitmap BitmapFromData(byte[] data)
+        {
+            Bitmap bmp = new Bitmap(160, 120);
+
+            for (int i = 0; i < 160 * 120 * 3; i += 3)
+            {
+                Color c = Color.FromArgb(data[i], data[i + 1], data[i + 2]);
+                bmp.SetPixel((i / 3) % 160, (i / 3) / 160, c);
+            }
+
+            bmp.RotateFlip(RotateFlipType.RotateNoneFlipXY);
             return bmp;
         }
 

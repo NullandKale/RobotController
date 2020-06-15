@@ -17,7 +17,7 @@ namespace RobotController
 
         public readonly int thumbMin = -32767;
         public readonly int thumbMax = 32767;
-        public readonly int thumbDeadZone = 5000;
+        public readonly int thumbDeadZone = 6000;
 
         public int motorL = 0;
         public int motorR = 0;
@@ -43,7 +43,7 @@ namespace RobotController
             while(run)
             {
                 updateState();
-                Thread.Sleep(250);
+                Thread.Sleep(125);
             }
         }
 
@@ -57,25 +57,10 @@ namespace RobotController
                 float rightTrigger = currentControllerState.Gamepad.RightTrigger;
                 float leftTrigger = currentControllerState.Gamepad.LeftTrigger;
 
-                if (leftYVal > thumbDeadZone || leftYVal < -thumbDeadZone)
-                {
-                    motorL = (int)leftYVal.Remap(thumbMin, thumbMax, -255, 255);
-                }
-                else
-                {
-                    motorL = 0;
-                }
+                motorR = 0;
+                motorL = 0;
 
-                if (rightYVal > thumbDeadZone || rightYVal < -thumbDeadZone)
-                {
-                    motorR = (int)rightYVal.Remap(thumbMin, thumbMax, -255, 255);
-                }
-                else
-                {
-                    motorR = 0;
-                }
-
-                if(rightTrigger > 0)
+                if (rightTrigger > 0)
                 {
                     motorL = (int)rightTrigger;
                     motorR = (int)rightTrigger;
@@ -85,6 +70,32 @@ namespace RobotController
                 {
                     motorL = (int)-leftTrigger;
                     motorR = (int)-leftTrigger;
+                }
+
+                if (leftYVal > thumbDeadZone || leftYVal < -thumbDeadZone)
+                {
+                    int val = (int)leftYVal.Remap(thumbMin, thumbMax, -255, 255);
+                    if (val > 0 && val > motorL)
+                    {
+                        motorL = val;
+                    }
+                    else if (val < 0 && val < motorL)
+                    {
+                        motorL = val;
+                    }
+                }
+
+                if (rightYVal > thumbDeadZone || rightYVal < -thumbDeadZone)
+                {
+                    int val = (int)rightYVal.Remap(thumbMin, thumbMax, -255, 255);
+                    if(val > 0 && val > motorR)
+                    {
+                        motorR = val;
+                    }
+                    else if(val < 0 && val < motorR)
+                    {
+                        motorR = val;
+                    }
                 }
 
                 window.hardware.setMotor(motorL, motorR);
