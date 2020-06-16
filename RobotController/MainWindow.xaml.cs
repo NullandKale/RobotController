@@ -27,11 +27,14 @@ namespace RobotController
         public SensorData sensorData;
         public ControllerController controller;
         public Hardware hardware;
+        public Settings settings;
         public MainWindow()
         {
             InitializeComponent();
             controller = new ControllerController(this);
             hardware = new Hardware(this);
+
+            settings = new Settings();
 
             controller.startThread();
         }

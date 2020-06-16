@@ -31,7 +31,7 @@ namespace RobotController.Robot
                     }
                 }
 
-                if(window.sensorData.mostRecent.range == 0 || window.sensorData.mostRecent.range > 30 || (l < 0 && r < 0))
+                if(window.sensorData.mostRecent.range == 0 || window.sensorData.mostRecent.range > 5 || (l < 0 && r < 0))
                 {
                     window.client.writeCache.Enqueue("motor|" + (r) + "," + (l));
                 }

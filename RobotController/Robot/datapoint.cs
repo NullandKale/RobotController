@@ -88,7 +88,14 @@ namespace RobotController.Robot
             for (int i = 0; i < 160 * 120 * 3; i += 3)
             {
                 Color c = Color.FromArgb(data[i], data[i + 1], data[i + 2]);
-                bmp.SetPixel((i / 3) % 160, (i / 3) / 160, c);
+                if((i / 3) / 160 >= 48)
+                {
+                    bmp.SetPixel((i / 3) % 160, (i / 3) / 160, Color.FromArgb(c.B, c.G, c.R));
+                }
+                else
+                {
+                    bmp.SetPixel((i / 3) % 160, (i / 3) / 160, c);
+                }
             }
 
             bmp.RotateFlip(RotateFlipType.RotateNoneFlipXY);

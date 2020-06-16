@@ -20,7 +20,7 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15">
                 <Label Content="IP:"/>
-                <TextBox Name="IP" Width="300"/>
+                <TextBox Name="IP" Width="300" Text="192.168.1.166"/>
             </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Connect" Click="Button_Click" Width="100"/>

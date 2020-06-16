@@ -95,8 +95,15 @@ namespace RobotController.Robot
             {
                 Application.Current.Dispatcher.InvokeAsync(() =>
                 {
+                    float powerPercent = (mostRecent.battery - 5.28f).Remap(0.1f, -0.8f, 0, 100);
+
+                    if(powerPercent < 0.6 && powerPercent > -4)
+                    {
+                        powerPercent = 0;
+                    }
+
                     window.tick.Content = string.Format(averageLatencyMS + "MS {0:0.##} ups", averageUPS);
-                    window.battery.Content = string.Format("{0:0.##}V per cell", mostRecent.battery);
+                    window.battery.Content = string.Format("{0:0} % power used", powerPercent);
                     window.range.Content = string.Format("{0:0.##} cm", mostRecent.range);
                     window.angles.Content = string.Format("[{0:0.##}, {0:0.##}, {0:0.##}]", mostRecent.AngleX, mostRecent.AngleY, mostRecent.AngleZ);
                     window.kangles.Content = string.Format("[{0:0.##}, {0:0.##}, {0:0.##}]", mostRecent.KAngleX, mostRecent.KAngleY, mostRecent.KAngleZ);
