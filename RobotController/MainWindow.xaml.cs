@@ -66,6 +66,11 @@ namespace RobotController
                         offset2--;
                         break;
                     }
+                case Key.P:
+                    {
+                        sensorData.takeScreenshot();
+                        break;
+                    }
             }
 
             if (sensorData != null)

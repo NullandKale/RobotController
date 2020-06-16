@@ -43,6 +43,8 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Grid.Row="0" Name="tick"/>
@@ -52,7 +54,18 @@
             <Label Grid.Column="0" Grid.Row="4" Name="kangles"/>
             <Label Grid.Column="0" Grid.Row="5" Name="accel"/>
             <Label Grid.Column="0" Grid.Row="6" Name="gyro"/>
-            <Label Grid.Column="0" Grid.Row="7" Name="motors"/>
+            <Grid Grid.Column="0" Grid.Row="7">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Name="motors"/>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Height="60" HorizontalAlignment="Center">
+                    <ProgressBar Name="motorProgressL" Style="{StaticResource VerticalProgressBar}" Width="5" Margin="10 0" Value="0" />
+                    <ProgressBar Name="motorProgressR" Style="{StaticResource VerticalProgressBar}" Width="5" Margin="10 0" Value="0" />
+                </StackPanel>
+            </Grid>
             <Label Grid.Column="0" Grid.Row="8" Name="servos"/>
         </Grid>
     </Grid>

@@ -31,6 +31,18 @@ namespace RobotController.Robot
             }
         }
 
+        public int readInt(string key, int defaul)
+        {
+            if(int.TryParse(store.read(key), out int toReturn))
+            {
+                return toReturn;
+            }
+            else
+            {
+                return defaul;
+            }
+        }
+
         public void saveString(string key, string value)
         {
             store.write(key, value);
@@ -81,9 +93,10 @@ namespace RobotController.Robot
 
         public void load()
         {
-            if(File.Exists(filename + extension))
+            cache = new Dictionary<string, string>();
+
+            if (File.Exists(filename + extension))
             {
-                cache = new Dictionary<string, string>();
                 string[] lines = File.ReadAllLines(filename + extension);
 
                 for(int i = 0; i < lines.Length; i++)

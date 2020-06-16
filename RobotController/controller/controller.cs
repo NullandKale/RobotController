@@ -3,6 +3,7 @@ using SharpDX.XInput;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.Text;
 using System.Threading;
 
@@ -25,6 +26,7 @@ namespace RobotController
 
         public int offset1 = 0;
         public int offset2 = 0;
+
 
         public ControllerController(MainWindow window)
         {
@@ -148,8 +150,7 @@ namespace RobotController
 
                 if(currentControllerState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder))
                 {
-                    string filePrefix = window.settings.readString("filePrefix", "./");
-                    
+                    window.sensorData.takeScreenshot();
                 }
 
                 updateMotorControl(left);

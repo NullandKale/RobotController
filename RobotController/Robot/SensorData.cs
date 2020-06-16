@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -30,8 +31,12 @@ namespace RobotController.Robot
         public Thread updateRequestThread;
         public bool waitingForResponse = false;
 
+        public int screenshotNumber = 0;
+
         public SensorData(MainWindow window)
         {
+            this.window = window;
+
             memory = new List<datapoint>();
             latencies = new Queue<long>();
             timer = new Stopwatch();
@@ -41,7 +46,8 @@ namespace RobotController.Robot
             updateRequestThread.IsBackground = true;
             updateRequestThread.Start();
 
-            this.window = window;
+
+            screenshotNumber = window.settings.readInt("screenshotCounter", 0);
         }
 
         private void updateMain()
@@ -89,6 +95,13 @@ namespace RobotController.Robot
             waitingForResponse = false;
         }
 
+        public void takeScreenshot()
+        {
+            datapoint.BitmapFromData(window.sensorData.mostRecent.imageData).Save("screenshot" + screenshotNumber + ".png", ImageFormat.Png);
+            screenshotNumber++;
+            window.settings.saveString("screenshotCounter", screenshotNumber + "");
+        }
+
         private void updateDisplay()
         {
             if(Application.Current != null)
@@ -96,8 +109,10 @@ namespace RobotController.Robot
                 Application.Current.Dispatcher.InvokeAsync(() =>
                 {
                     float powerPercent = (mostRecent.battery - 5.28f).Remap(0.1f, -0.8f, 0, 100);
+                    int motorProgL = (int)((float)mostRecent.currentMotorL).Remap(-255, 255, 0, 100);
+                    int motorProgR = (int)((float)mostRecent.currentMotorL).Remap(-255, 255, 0, 100);
 
-                    if(powerPercent < 0.6 && powerPercent > -4)
+                    if (powerPercent < 0.6 && powerPercent > -4)
                     {
                         powerPercent = 0;
                     }
@@ -110,6 +125,8 @@ namespace RobotController.Robot
                     window.accel.Content = string.Format("[{0:0.##}, {0:0.##}, {0:0.##}]", mostRecent.aX, mostRecent.aY, mostRecent.aZ);
                     window.gyro.Content = string.Format("[{0:0.##}, {0:0.##}, {0:0.##}]", mostRecent.gX, mostRecent.gY, mostRecent.gZ);
                     window.motors.Content = "[ " + mostRecent.currentMotorL + ", " + mostRecent.currentMotorR + " ]";
+                    window.motorProgressL.Value = motorProgL;
+                    window.motorProgressR.Value = motorProgR;
                     window.servos.Content = "[ " + mostRecent.currentServo1 + ", " + mostRecent.currentServo2 + " ]";
                     try
                     {
