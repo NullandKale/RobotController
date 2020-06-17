@@ -71,6 +71,12 @@ namespace RobotController
                         sensorData.takeScreenshot();
                         break;
                     }
+                case Key.O:
+                    {
+                        offset1 = 0;
+                        offset2 = 0;
+                        break;
+                    }
             }
 
             if (sensorData != null)

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -33,6 +36,8 @@ namespace RobotController.Robot
 
         public int screenshotNumber = 0;
 
+        public Color[,] blackOffset;
+
         public SensorData(MainWindow window)
         {
             this.window = window;
@@ -42,12 +47,67 @@ namespace RobotController.Robot
             timer = new Stopwatch();
             timer.Start();
 
+            calibrateImage();
+
             updateRequestThread = new Thread(updateMain);
             updateRequestThread.IsBackground = true;
             updateRequestThread.Start();
 
-
             screenshotNumber = window.settings.readInt("screenshotCounter", 0);
+        }
+
+        public void calibrateImage()
+        {
+            List<Bitmap> blackImages = new List<Bitmap>();
+
+            try
+            {
+                string[] images = Directory.GetFiles("./calibrationImages/fullDark/");
+
+                for (int i = 0; i < images.Length; i++)
+                {
+                    Bitmap fromFile = (Bitmap)Image.FromFile(images[i]);
+                    if (fromFile != null)
+                    {
+                        blackImages.Add(fromFile);
+                    }
+                }
+
+                if (blackImages.Count > 0)
+                {
+                    int[,] averageAccumulatorR = new int[blackImages[0].Width, blackImages[0].Height];
+                    int[,] averageAccumulatorG = new int[blackImages[0].Width, blackImages[0].Height];
+                    int[,] averageAccumulatorB = new int[blackImages[0].Width, blackImages[0].Height];
+
+                    for (int x = 0; x < blackImages.Count; x++)
+                    {
+                        for (int i = 0; i < blackImages[0].Width; i++)
+                        {
+                            for (int j = 0; j < blackImages[0].Height; j++)
+                            {
+                                Color c = blackImages[0].GetPixel(i, j);
+                                averageAccumulatorR[i, j] += c.R;
+                                averageAccumulatorG[i, j] += c.G;
+                                averageAccumulatorB[i, j] += c.B;
+                            }
+                        }
+                    }
+
+                    blackOffset = new Color[blackImages[0].Width, blackImages[0].Height];
+
+                    for (int i = 0; i < blackImages[0].Width; i++)
+                    {
+                        for (int j = 0; j < blackImages[0].Height; j++)
+                        {
+                            blackOffset[i, j] = Color.FromArgb(averageAccumulatorR[i, j] / blackImages.Count, averageAccumulatorG[i, j] / blackImages.Count, averageAccumulatorB[i, j] / blackImages.Count);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.Message);
+            }
         }
 
         private void updateMain()
@@ -97,7 +157,7 @@ namespace RobotController.Robot
 
         public void takeScreenshot()
         {
-            datapoint.BitmapFromData(window.sensorData.mostRecent.imageData).Save("screenshot" + screenshotNumber + ".png", ImageFormat.Png);
+            datapoint.BitmapFromData(window.sensorData.mostRecent.imageData, blackOffset).Save("screenshot" + screenshotNumber + ".png", ImageFormat.Png);
             screenshotNumber++;
             window.settings.saveString("screenshotCounter", screenshotNumber + "");
         }
@@ -124,13 +184,14 @@ namespace RobotController.Robot
                     window.kangles.Content = string.Format("[{0:0.##}, {0:0.##}, {0:0.##}]", mostRecent.KAngleX, mostRecent.KAngleY, mostRecent.KAngleZ);
                     window.accel.Content = string.Format("[{0:0.##}, {0:0.##}, {0:0.##}]", mostRecent.aX, mostRecent.aY, mostRecent.aZ);
                     window.gyro.Content = string.Format("[{0:0.##}, {0:0.##}, {0:0.##}]", mostRecent.gX, mostRecent.gY, mostRecent.gZ);
-                    window.motors.Content = "[ " + mostRecent.currentMotorL + ", " + mostRecent.currentMotorR + " ]";
+                    window.motorL.Content = "" + mostRecent.currentMotorL;
+                    window.motorR.Content = "" + mostRecent.currentMotorR;
                     window.motorProgressL.Value = motorProgL;
                     window.motorProgressR.Value = motorProgR;
                     window.servos.Content = "[ " + mostRecent.currentServo1 + ", " + mostRecent.currentServo2 + " ]";
                     try
                     {
-                        window.Frame.Source = datapoint.BitmapToImageSource(datapoint.BitmapFromData(mostRecent.imageData));
+                        window.Frame.Source = datapoint.BitmapToImageSource(datapoint.BitmapFromData(mostRecent.imageData, blackOffset));
                     }
                     catch (Exception e)
                     {
