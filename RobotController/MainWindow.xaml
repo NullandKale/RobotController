@@ -25,7 +25,10 @@
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Connect" Click="Button_Click" Width="100"/>
             </StackPanel>
-            <Image Grid.Row="2" Name="Frame" Source="black.png" Stretch="Uniform" />
+            <Grid Grid.Row="2">
+                <Image Name="Frame" Source="black.png" Stretch="Uniform" />
+                <Image Name="FrameOverlay" Source="/assets/HUD overlay.png" Stretch="Uniform" />
+            </Grid>
         </Grid>
 
         <Grid Grid.Column="1">
@@ -54,19 +57,24 @@
             <Label Grid.Column="0" Grid.Row="4" Name="kangles"/>
             <Label Grid.Column="0" Grid.Row="5" Name="accel"/>
             <Label Grid.Column="0" Grid.Row="6" Name="gyro"/>
-            <Grid Grid.Column="0" Grid.Row="7">
+            <Grid Grid.Column="0" Grid.Row="8">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" Name="motors"/>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Height="60" HorizontalAlignment="Center">
-                    <ProgressBar Name="motorProgressL" Style="{StaticResource VerticalProgressBar}" Width="5" Margin="10 0" Value="0" />
-                    <ProgressBar Name="motorProgressR" Style="{StaticResource VerticalProgressBar}" Width="5" Margin="10 0" Value="0" />
-                </StackPanel>
+                <Label Grid.Row="0" Grid.Column="0" Name="motors" Content="motors :" VerticalAlignment="Center"/>
+                <ProgressBar  Grid.Row="0" Grid.Column="1" Height="100" Name="motorProgressL" Style="{StaticResource VerticalProgressBar}" VerticalAlignment="Center" Width="15" Margin="30" Value="0" Background="Black" BorderBrush="Black" />
+                <ProgressBar Grid.Row="0" Grid.Column="2" Height="100" Name="motorProgressR" Style="{StaticResource VerticalProgressBar}" VerticalAlignment="Center" Width="15" Margin="30" Value="0" Background="Black" BorderBrush="Black" />
+                <Label Grid.Row="1" Grid.Column="1" Name="motorL" Content="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Label Grid.Row="1" Grid.Column="2" Name="motorR" Content="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            <Label Grid.Column="0" Grid.Row="8" Name="servos"/>
+            <Label Grid.Column="0" Grid.Row="7" Name="servos"/>
         </Grid>
     </Grid>
 </Window>

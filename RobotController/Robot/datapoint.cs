@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -81,24 +82,43 @@ namespace RobotController.Robot
             return bmp;
         }
 
-        public static Bitmap BitmapFromData(byte[] data)
+        public static Bitmap BitmapFromData(byte[] data, Color[,] blackOffset)
         {
             Bitmap bmp = new Bitmap(160, 120);
 
             for (int i = 0; i < 160 * 120 * 3; i += 3)
             {
-                Color c = Color.FromArgb(data[i], data[i + 1], data[i + 2]);
-                if((i / 3) / 160 >= 48)
+                Color c = Utils.FromUnboundedRGB(data[i], data[i + 1], data[i + 2]);
+
+                int x = ((i / 3) % 160);
+                int y = ((i / 3) / 160);
+
+                if ((i / 3) / 160 >= 48)
                 {
-                    bmp.SetPixel((i / 3) % 160, (i / 3) / 160, Color.FromArgb(c.B, c.G, c.R));
+                    c = Color.FromArgb(c.B, c.G, c.R);
                 }
-                else
+
+                if (blackOffset != null)
                 {
-                    bmp.SetPixel((i / 3) % 160, (i / 3) / 160, c);
+                    float correctedR = c.R;
+                    float correctedB = c.B;
+                    float correctedG = c.G;
+
+                    int xR = 159 - x;
+                    int yR = 119 - y;
+
+                    correctedR = correctedR.Remap(blackOffset[xR, yR].R, 255, 0, 255);
+                    correctedG = correctedG.Remap(blackOffset[xR, yR].G, 255, 0, 255);
+                    correctedB = correctedB.Remap(blackOffset[xR, yR].B, 255, 0, 255);
+
+                    c = Utils.FromUnboundedRGB((int)correctedR, (int)correctedG, (int)correctedB);
                 }
+
+                bmp.SetPixel(x, y, c);
             }
 
             bmp.RotateFlip(RotateFlipType.RotateNoneFlipXY);
+
             return bmp;
         }
 
