@@ -19,7 +19,7 @@ namespace RobotController
 
         public readonly int thumbMin = -32767;
         public readonly int thumbMax = 32767;
-        public readonly int thumbDeadZone = 6000;
+        public readonly int thumbDeadZone = 10000;
 
         public int motorL = 0;
         public int motorR = 0;
@@ -97,22 +97,47 @@ namespace RobotController
             motorL = stick.y;
             motorR = stick.y;
 
-            if(Math.Abs(stick.y) < 90)
+            //if(stick.y != 0)
+            //{
+            //    if (stick.x < 0)
+            //    {
+            //        motorL += stick.x;
+            //    }
+            //    else if (stick.x > 0)
+            //    {
+            //        motorR -= stick.x;
+            //    }
+            //}
+            //else
+            //{
+            //    if (stick.x < 0)
+            //    {
+            //        motorL += stick.x;
+            //        motorR -= stick.x;
+            //    }
+            //    else if (stick.x > 0)
+            //    {
+            //        motorR -= stick.x;
+            //        motorL += stick.x;
+            //    }
+            //}
+
+            if (Math.Abs(stick.y) < 90)
             {
                 motorL += stick.x * 2;
                 motorR -= stick.x * 2;
             }
-            else if(Math.Abs(stick.x) > 46)
+            else if (Math.Abs(stick.x) > 46)
             {
                 motorL += stick.x / 2;
                 motorR -= stick.x / 2;
             }
 
-            if(motorL > 255)
+            if (motorL > 255)
             {
                 motorL = 255;
             }
-            else if(motorL < -255)
+            else if (motorL < -255)
             {
                 motorL = -255;
             }
@@ -126,7 +151,7 @@ namespace RobotController
                 motorR = -255;
             }
 
-            if(motorR > 0 && motorL > 0)
+            if (motorR > 0 && motorL > 0)
             {
                 if(window.sensorData.mostRecent.range <= 25 && window.sensorData.mostRecent.range != 0)
                 {
