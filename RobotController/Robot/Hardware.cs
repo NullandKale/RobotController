@@ -6,9 +6,9 @@ namespace RobotController.Robot
 {
     public class Hardware
     {
-        public MainWindow window;
+        public ConnectedRobot window;
 
-        public Hardware(MainWindow window)
+        public Hardware(ConnectedRobot window)
         {
             this.window = window;
         }

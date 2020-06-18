@@ -1,0 +1,76 @@
+﻿<Window x:Class="RobotController.ConnectedRobot"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RobotController"
+        mc:Ignorable="d"
+        Title="RobotController" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15">
+                <Label Name="IP" Content="IP:"/>
+            </StackPanel>
+            <Grid Grid.Row="2">
+                <Image Name="Frame" Source="black.png" Stretch="Uniform" />
+                <Image Name="FrameOverlay" Source="/assets/HUD overlay.png" Stretch="Uniform" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="0" Name="tick"/>
+            <Label Grid.Column="0" Grid.Row="1" Name="battery"/>
+            <Label Grid.Column="0" Grid.Row="2" Name="range"/>
+            <Label Grid.Column="0" Grid.Row="3" Name="angles"/>
+            <Label Grid.Column="0" Grid.Row="4" Name="kangles"/>
+            <Label Grid.Column="0" Grid.Row="5" Name="accel"/>
+            <Label Grid.Column="0" Grid.Row="6" Name="gyro"/>
+            <Grid Grid.Column="0" Grid.Row="8">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Name="motors" Content="motors :" VerticalAlignment="Center"/>
+                <ProgressBar  Grid.Row="0" Grid.Column="1" Height="100" Name="motorProgressL" Style="{StaticResource VerticalProgressBar}" VerticalAlignment="Center" Width="15" Margin="30" Value="0" Background="Black" BorderBrush="Black" />
+                <ProgressBar Grid.Row="0" Grid.Column="2" Height="100" Name="motorProgressR" Style="{StaticResource VerticalProgressBar}" VerticalAlignment="Center" Width="15" Margin="30" Value="0" Background="Black" BorderBrush="Black" />
+                <Label Grid.Row="1" Grid.Column="1" Name="motorL" Content="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Label Grid.Row="1" Grid.Column="2" Name="motorR" Content="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Label Grid.Column="0" Grid.Row="7" Name="servos"/>
+        </Grid>
+    </Grid>
+</Window>

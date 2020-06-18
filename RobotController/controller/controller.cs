@@ -11,7 +11,7 @@ namespace RobotController
 {
     public class ControllerController
     {
-        public MainWindow window;
+        public ConnectedRobot window;
         public Controller controller;
         public State currentControllerState;
         public Thread updateThread;
@@ -28,7 +28,7 @@ namespace RobotController
         public int offset2 = 0;
 
 
-        public ControllerController(MainWindow window)
+        public ControllerController(ConnectedRobot window)
         {
             this.window = window;
             controller = new Controller(UserIndex.One);
