@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace RobotController.Robot
 {
+    [Serializable]
     public struct datapoint
     {
         public int tick;

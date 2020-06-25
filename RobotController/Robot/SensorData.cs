@@ -16,11 +16,10 @@ namespace RobotController.Robot
     {
         public bool run = true;
         public string tag = "S";
-        List<datapoint> memory;
         public datapoint mostRecent;
         public Queue<long> latencies;
 
-        ConnectedRobot window;
+        ConnectedRobot robot;
 
         public long averageAccumulator = 0;
         public long averageLatencyMS = 0;
@@ -38,11 +37,10 @@ namespace RobotController.Robot
 
         public Color[,] blackOffset;
 
-        public SensorData(ConnectedRobot window)
+        public SensorData(ConnectedRobot robot)
         {
-            this.window = window;
+            this.robot = robot;
 
-            memory = new List<datapoint>();
             latencies = new Queue<long>();
             timer = new Stopwatch();
             timer.Start();
@@ -53,7 +51,7 @@ namespace RobotController.Robot
             updateRequestThread.IsBackground = true;
             updateRequestThread.Start();
 
-            screenshotNumber = window.settings.readInt("screenshotCounter", 0);
+            screenshotNumber = robot.settings.readInt("screenshotCounter", 0);
         }
 
         public void calibrateImage()
@@ -120,7 +118,7 @@ namespace RobotController.Robot
                 }
                 else
                 {
-                    window.client.writeCache.Enqueue("S|update," + mostRecent.tick);
+                    robot.client.writeCache.Enqueue("S|update," + mostRecent.tick);
                     waitingForResponse = true;
                 }
             }
@@ -149,17 +147,20 @@ namespace RobotController.Robot
         public void receive(string message)
         {
             mostRecent = datapoint.Deserialize(Convert.FromBase64String(message.Trim('\n')), 0);
-            memory.Add(mostRecent);
-            window.updateDisplay(mostRecent);
+            robot.memory.addToWorking(mostRecent);
+            if(robot.memory.state != MemoryManager.MemoryRecordingState.playback)
+            {
+                robot.updateDisplay(mostRecent);
+            }
             updateTimer();
             waitingForResponse = false;
         }
 
         public void takeScreenshot()
         {
-            datapoint.BitmapFromData(window.sensorData.mostRecent.imageData, blackOffset).Save("screenshot" + screenshotNumber + ".png", ImageFormat.Png);
+            datapoint.BitmapFromData(robot.sensorData.mostRecent.imageData, blackOffset).Save("screenshot" + screenshotNumber + ".png", ImageFormat.Png);
             screenshotNumber++;
-            window.settings.saveString("screenshotCounter", screenshotNumber + "");
+            robot.settings.saveString("screenshotCounter", screenshotNumber + "");
         }
     }
 }

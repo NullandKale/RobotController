@@ -21,10 +21,14 @@ namespace RobotController
     public partial class ConnectedRobot : Window
     {
         public tcpClient client;
+
+        public MemoryManager memory;
         public SensorData sensorData;
-        public ControllerController controller;
         public Hardware hardware;
+        
         public Settings settings;
+
+        public ControllerController controller;
 
         private int offset1 = 0;
         private int offset2 = 0;
@@ -39,6 +43,7 @@ namespace RobotController
             hardware = new Hardware(this);
 
             settings = new Settings();
+            memory = new MemoryManager(this);
 
             client = new tcpClient(ip);
             client.connect();
@@ -48,12 +53,24 @@ namespace RobotController
 
             controller.startThread();
 
-            this.Closing += ConnectedRobot_Closing;
+            Closing += ConnectedRobot_Closing;
         }
 
         private void ConnectedRobot_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            memory.Stop();
             mainWindow.Close();
+        }
+
+        public void updateMemoryState(string state)
+        {
+            if (Application.Current != null)
+            {
+                Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    memoryState.Content = state;
+                });
+            }
         }
 
         public void updateDisplay(datapoint mostRecent)
@@ -71,18 +88,11 @@ namespace RobotController
                         powerPercent = 0;
                     }
 
-                    tick.Content = string.Format(sensorData.averageLatencyMS + "MS {0:0.##} ups", sensorData.averageUPS);
-                    battery.Content = string.Format("{0:0} % power used", powerPercent);
-                    range.Content = string.Format("{0:0.##} cm", mostRecent.range);
-                    angles.Content = string.Format("[{0:0.##}, {1:0.##}, {2:0.##}]", mostRecent.AngleX, mostRecent.AngleY, mostRecent.AngleZ);
-                    kangles.Content = string.Format("[{0:0.##}, {1:0.##}, {2:0.##}]", mostRecent.KAngleX, mostRecent.KAngleY, mostRecent.KAngleZ);
-                    accel.Content = string.Format("[{0:0.##}, {1:0.##}, {2:0.##}]", mostRecent.aX, mostRecent.aY, mostRecent.aZ);
-                    gyro.Content = string.Format("[{0:0.##}, {1:0.##}, {2:0.##}]", mostRecent.gX, mostRecent.gY, mostRecent.gZ);
+                    tick.Content = string.Format("{0:0} ups | {1:0} ms | {2:0.##} v | {3:0.##} cm", sensorData.averageUPS, sensorData.averageLatencyMS, mostRecent.battery, mostRecent.range);
                     motorL.Content = "" + mostRecent.currentMotorL;
                     motorR.Content = "" + mostRecent.currentMotorR;
                     motorProgressL.Value = motorProgL;
                     motorProgressR.Value = motorProgR;
-                    servos.Content = "[ " + mostRecent.currentServo1 + ", " + mostRecent.currentServo2 + " ]";
                     try
                     {
                         Frame.Source = datapoint.BitmapToImageSource(datapoint.BitmapFromData(mostRecent.imageData, sensorData.blackOffset));
@@ -136,6 +146,26 @@ namespace RobotController
             {
                 hardware.setServo(offset1, offset2);
             }
+        }
+
+        private void REC_click(object sender, RoutedEventArgs e)
+        {
+            memory.Record();
+        }
+
+        private void PLAY_click(object sender, RoutedEventArgs e)
+        {
+            memory.Play();
+        }
+
+        private void STOP_click(object sender, RoutedEventArgs e)
+        {
+            memory.Stop();
+        }
+
+        private void LOAD_click(object sender, RoutedEventArgs e)
+        {
+            memory.loadMemories();
         }
     }
 }
