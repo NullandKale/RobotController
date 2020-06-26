@@ -25,13 +25,9 @@ namespace RobotController
         public MemoryManager memory;
         public SensorData sensorData;
         public Hardware hardware;
-        
         public Settings settings;
-
         public ControllerController controller;
-
-        private int offset1 = 0;
-        private int offset2 = 0;
+        
         private MainWindow mainWindow;
 
         public ConnectedRobot(MainWindow mainWindow, string ip)
@@ -109,42 +105,11 @@ namespace RobotController
         {
             switch (e.Key)
             {
-                case Key.Up:
-                    {
-                        offset1++;
-                        break;
-                    }
-                case Key.Down:
-                    {
-                        offset1--;
-                        break;
-                    }
-                case Key.Left:
-                    {
-                        offset2++;
-                        break;
-                    }
-                case Key.Right:
-                    {
-                        offset2--;
-                        break;
-                    }
                 case Key.P:
                     {
                         sensorData.takeScreenshot();
                         break;
                     }
-                case Key.O:
-                    {
-                        offset1 = 0;
-                        offset2 = 0;
-                        break;
-                    }
-            }
-
-            if (sensorData != null)
-            {
-                hardware.setServo(offset1, offset2);
             }
         }
 

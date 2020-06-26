@@ -19,7 +19,7 @@ namespace RobotController
 
         public readonly int thumbMin = -32767;
         public readonly int thumbMax = 32767;
-        public readonly int thumbDeadZone = 10000;
+        public readonly int thumbDeadZone = 5000;
 
         public int motorL = 0;
         public int motorR = 0;
@@ -27,6 +27,7 @@ namespace RobotController
         public int offset1 = 0;
         public int offset2 = 0;
 
+        public Stopwatch lastInputTimer;
 
         public ControllerController(ConnectedRobot window)
         {
@@ -46,7 +47,7 @@ namespace RobotController
             while(run)
             {
                 updateState();
-                Thread.Sleep(125);
+                Thread.Sleep(50);
             }
         }
 
@@ -54,8 +55,8 @@ namespace RobotController
         {
             (float x, float y) toReturn;
 
-            float XVal = 0;
-            float YVal = 0;
+            float XVal;
+            float YVal;
 
             if (left)
             {
@@ -87,6 +88,19 @@ namespace RobotController
             }
 
             return toReturn;
+        }
+
+        private void updateServoControl((float x, float y) stick)
+        {
+            int servo1 = (int)stick.y.Remap(255, -255, -90, 90);
+            int servo2 = (int)stick.x.Remap(255, -255, -90, 90);
+
+            if(servo1 > 50)
+            {
+                servo1 = 50;
+            }
+
+            window.hardware.setServo(servo1, servo2);
         }
 
         private void updateMotorControl((float x, float y) stick)
@@ -178,7 +192,13 @@ namespace RobotController
                     window.sensorData.takeScreenshot();
                 }
 
+                if (currentControllerState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder))
+                {
+                    window.hardware.setServo(0, 0);
+                }
+
                 updateMotorControl(left);
+                updateServoControl(right);
             }
         }
 
